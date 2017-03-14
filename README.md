@@ -83,6 +83,29 @@ Oracle客户端开发包的下载首页为：
 
 > export LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib
 
+#### 2.1.7.配置pkgconfig配置文件
+
+创建/usr/share/pkgconfig/oci8.pc文件，此文件内容为：
+
+> prefix=/usr
+
+> includedir=${prefix}/include/oracle/11.2/client64
+
+> libdir=${prefix}/lib/oracle/11.2/client64/lib
+
+> 
+
+> Name: oci8
+
+> Description: Oracle Instant Client
+
+> Version: 11.2
+
+> Cflags: -I${includedir}
+
+> Libs: -L${libdir} -lclntsh -locci
+
+
 
 #### 2.1.7.使环境变量生效
 
