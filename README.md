@@ -29,6 +29,7 @@ Oracle客户端开发包的下载首页为：
 由于Oracle 11Gr2是现在占比非常高的版本，各种的bug也最少。所以，本文档选择“Version 11.2.0.4.0 ”这个版本，需要下载这个版本中的两个文件
 
 >  oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm 
+
 >  oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm 
 
 以上两个文件basic为库文件，devel为头文件和库文件。
