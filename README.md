@@ -1,6 +1,6 @@
 Golang开发Oracle应用程序
 
-1.前言
+### 1.前言
 
 出于项目需要，并行运维组的监控系统要支持Oracle、DB2等商业数据库。
 
@@ -10,15 +10,15 @@ Golang开发Oracle应用程序
 
 所以最终采集端使用Golang+go-oci8进行开发。
 
-2.准备开发环境
+### 2.准备开发环境
 
-2.1.操作系统选择
+#### 2.1.操作系统选择
 
 Oracle客户端开发环境支持全系的Windows、Mac和Linux系统。所以可以选择一个自己习惯的系统作为自己的开发环境。
 
 本文档以CentOS6 64位系统为例。
 
-2.1.1.下载Oracle客户端开发包
+#### 2.1.1.下载Oracle客户端开发包
 
 Oracle客户端开发包的下载首页为：
 
@@ -33,7 +33,7 @@ Oracle客户端开发包的下载首页为：
 
 以上两个文件basic为库文件，devel为头文件和库文件。
 
-2.1.2.安装Oracle客户端开发包
+#### 2.1.2.安装Oracle客户端开发包
 
 本文档的系统为CentOS6，下载好两个rpm包后用yun安装
 
@@ -44,25 +44,25 @@ Oracle客户端开发包的下载首页为：
 1. /usr/include/oracle/11.2/client64开发用的头文件。
 1. /usr/lib/oracle/11.2/client64/lib开发库文件。
 
-2.1.3.安装Golang
+#### 2.1.3.安装Golang
 
 可以参考go官方的安装方法安装此软件，也可以使用系统默认带的版本安装。
 
-2.1.4.创建一个系统用户
+#### 2.1.4.创建一个系统用户
 
 此用户作为开发用户，如果不创建用户也可以使用root用户
 
 > \# useradd go
 > \# passwd go
 
-2.1.5.在go用户的家目录新建工作目录
+#### 2.1.5.在go用户的家目录新建工作目录
 
 > $ mkdir /home/go/go
 > $ cd go
 > $ mkdir bin pkg src
 
 
-2.1.6.为新建的go用户配置环境变量
+#### 2.1.6.为新建的go用户配置环境变量
 
 修改.bashrc文件，追加如下内容
 
@@ -74,17 +74,17 @@ Oracle客户端开发包的下载首页为：
 > export export GO_OCI8_CONNECT_STRING="system/oracle@172.18.7.201:1521/DB11G"
 > export LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib
 
-2.1.7.使环境变量生效
+#### 2.1.7.使环境变量生效
 
 > $ source .bashrc
 
-3.第一个程序
+### 3.第一个程序
 
-3.1.下载go-oci8包
+#### 3.1.下载go-oci8包
 
 > $ go get github.com/wendal/go-oci8
 
-3.2.创建应用程序
+#### 3.2.创建应用程序
 
 在/home/go/go/src/目录中新建一个目录
 
@@ -104,9 +104,9 @@ Oracle客户端开发包的下载首页为：
 
 执行编译好的二进制文件。
 
-4.需要注意的地方
+### 4.需要注意的地方
 
-goenv中的CGO_ENABLED必须为1,这样才能调用Oracle的动态库文件。
+go env中的CGO_ENABLED必须为1,这样才能调用Oracle的动态库文件。
 
 
 
