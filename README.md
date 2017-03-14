@@ -68,12 +68,19 @@ Oracle客户端开发包的下载首页为：
 修改.bashrc文件，追加如下内容
 
 > export GOPATH="/home/go/go"
+
 > export GOBIN=$GOPATH/bin
+
 > export CGO_ENABLED=1
+
 > export ORACLE_HOME=/usr/lib/oracle/11.2/client64
+
 > export PATH=$PATH:$GOBIN:$ORACLE_HOME/bin
+
 > export export GO_OCI8_CONNECT_STRING="system/oracle@172.18.7.201:1521/DB11G"
+
 > export LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib
+
 
 #### 2.1.7.使环境变量生效
 
