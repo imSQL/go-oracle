@@ -79,6 +79,8 @@ Oracle客户端开发包的下载首页为：
 
 > export export GO_OCI8_CONNECT_STRING="system/oracle@172.18.7.201:1521/DB11G"
 
+:star2 此环境变量是目标数据库的连接信息 :star2
+
 > export LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib
 
 
