@@ -10,7 +10,9 @@ import (
 
 type ID string
 
-const query_text1 = `select n.wait_class, round(m.time_waited/m.INTSIZE_CSEC,3) AAS
+const (
+	query_text1 = `
+	select n.wait_class, round(m.time_waited/m.INTSIZE_CSEC,3) AAS
         from   v$waitclassmetric  m, v$system_wait_class n
         where m.wait_class_id=n.wait_class_id and n.wait_class != 'Idle'
         union
@@ -25,7 +27,7 @@ const query_text1 = `select n.wait_class, round(m.time_waited/m.INTSIZE_CSEC,3) 
                 ( select value cpu_count from v$parameter where name='cpu_count' )  parameter,
                 ( select  'CPU', round(value/100,3) cpu from v$sysmetric where metric_name='CPU Usage Per Sec' and group_id=2) aas`
 
-const query_text2 = `select
+	query_text2 = `select
 	n.wait_class wait_class,
        	n.name wait_name,
        	m.wait_count cnt,
@@ -34,6 +36,7 @@ const query_text2 = `select
      	v$event_name n
 	where m.event_id=n.event_id
   	and n.wait_class <> 'Idle' and m.wait_count > 0 order by 1 `
+)
 
 func (id ID) Scan(src interface{}) error {
 	fmt.Println(src)
