@@ -84,7 +84,7 @@ func main() {
 	defer db.Close()
 
 	var wait_class string
-	rows, err := db.Query(query_text1)
+	rows, err := db.Query(ViewSystemLoad)
 	if err != nil {
 		fmt.Println(err)
 		return
