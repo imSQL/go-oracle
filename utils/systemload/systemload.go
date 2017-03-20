@@ -4,7 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/mattn/go-oci8"
+	"os"
 	"pdefcon-for-oracle/utils/sqlutils"
+	"sort"
+	"strings"
 )
 
 type SystemLoad struct {
@@ -73,5 +76,21 @@ func (sl *SystemLoad) GetSystemLoad() {
 }
 
 func (sl *SystemLoad) PrintMetrics() {
-	fmt.Println(sl.sr)
+	map_length := len(sl.sr)
+	current_hostname, _ := os.Hostname()
+	sorted_keys := make([]int, 0)
+	for k, _ := range sl.sr {
+		sorted_keys = append(sorted_keys, k)
+	}
+
+	sort.Ints(sorted_keys)
+
+	fmt.Fprintf(os.Stdout, "Oracle,host=%s,region=SystemLoad ", current_hostname)
+	for _, k := range sorted_keys {
+		fmt.Fprintf(os.Stdout, "%s=%s", strings.Replace(strings.Replace(sl.sr[k]["WAIT_CLASS"], " ", "_", -1), "/", "", -1), strings.Replace(sl.sr[k]["AAS"], ".", "0.", -1))
+		if k < map_length-1 {
+			fmt.Fprintf(os.Stdout, ",")
+		}
+	}
+	fmt.Println()
 }
