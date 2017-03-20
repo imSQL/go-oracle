@@ -3,53 +3,23 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"os"
-
 	_ "github.com/mattn/go-oci8"
+	"os"
+	//	"utils/controlfiles"
+	//	"utils/database"
+	//	"utils/datafile"
+	//	"utils/eventmetrics"
+	//	"utils/instance"
+	//	"utils/onlinelogs"
+	//	"utils/parameters"
+	//	"utils/sga"
+	"pdefcon-for-oracle/utils/systemload"
+	//	"utils/tablespace"
+	//	"utils/users"
+	//	"utils/version"
 )
 
 type ID string
-
-const (
-	ViewSystemLoad = `
-	select n.wait_class, round(m.time_waited/m.INTSIZE_CSEC,3) AAS
-        from   v$waitclassmetric  m, v$system_wait_class n
-        where m.wait_class_id=n.wait_class_id and n.wait_class != 'Idle'
-        union
-        select  'CPU', round(value/100,3) AAS
-        from v$sysmetric where metric_name='CPU Usage Per Sec' and group_id=2
-        union select 'CPU_OS', round((prcnt.busy*parameter.cpu_count)/100,3) - aas.cpu
-        from
-            ( select value busy
-                from v$sysmetric
-                where metric_name='Host CPU Utilization (%)'
-                and group_id=2 ) prcnt,
-                ( select value cpu_count from v$parameter where name='cpu_count' )  parameter,
-                ( select  'CPU', round(value/100,3) cpu from v$sysmetric where metric_name='CPU Usage Per Sec' and group_id=2) aas`
-
-	ViewEventMetrics = `select
-	n.wait_class wait_class,
-       	n.name wait_name,
-       	m.wait_count cnt,
-       	round(10*m.time_waited/nullif(m.wait_count,0),3) avgms
-	from v$eventmetric m,
-     	v$event_name n
-	where m.event_id=n.event_id
-  	and n.wait_class <> 'Idle' and m.wait_count > 0 order by 1 `
-
-	ViewDatabase                 = `SELECT NAME,CREATED,LOG_MODE,OPEN_MODE FROM V$DATABASE`
-	ViewInstance                 = `SELECT HOST_NAME,INSTANCE_NAME,VERSION FROM V$INSTANCE`
-	ViewVersion                  = `SELECT * FROM V$VERSION`
-	ViewControlfile              = `SELECT * FROM V$CONTROLFILE`
-	ViewOnlineLogs               = `SELECT GROUP#,MEMBERS,BYTES,STATUS,ARCHIVED FROM V$LOG`
-	ViewOnlineLogsFiles          = `SELECT * FROM V$LOGFILE`
-	ViewTableSpace               = `SELECT TABLESPACE_NAME,BLOCK_SIZE,STATUS,CONTENTS,LOGGING FROM DBA_TABLESPACES`
-	ViewDataFiles                = `SELECT FILE_ID,FILE_NAME,TABLESPACE_NAME,STATUS,BYTES FROM DBA_DATA_FILES`
-	ViewUsers                    = `SELECT USERNAME,CREATED FROM DBA_USERS`
-	ViewControlFileRecordSection = `SELECT TYPE,RECORD_SIZE,RECORDS_TOTAL,RECORDS_USED FROM V$CONTROLFILE_RECORD_SECTION`
-	ViewSGA                      = `SELECT * FROM V$SGAINFO`
-	ViewSpparameter              = `SELECT NAME,VALUE FROM V$SPPARAMETER`
-)
 
 func (id ID) Scan(src interface{}) error {
 	fmt.Println(src)
@@ -84,7 +54,7 @@ func main() {
 	defer db.Close()
 
 	var wait_class string
-	rows, err := db.Query(ViewSystemLoad)
+	rows, err := db.Query(systemload.ViewSystemLoad)
 	if err != nil {
 		fmt.Println(err)
 		return
