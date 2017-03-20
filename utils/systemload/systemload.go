@@ -1,5 +1,17 @@
 package systemload
 
+import (
+	"database/sql"
+	"fmt"
+	_ "github.com/mattn/go-oci8"
+	"pdefcon-for-oracle/utils/sqlutils"
+)
+
+type SystemLoad struct {
+	sr        sqlutils.Result
+	DbHandler *sql.DB
+}
+
 const ViewSystemLoad = `
 SELECT
     n.wait_class,
@@ -55,3 +67,11 @@ FROM
     )
     aas
 `
+
+func (sl *SystemLoad) GetSystemLoad() {
+	sl.sr.GetMetric(sl.DbHandler, ViewSystemLoad)
+}
+
+func (sl *SystemLoad) PrintMetrics() {
+	fmt.Println(sl.sr)
+}

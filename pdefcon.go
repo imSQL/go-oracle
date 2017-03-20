@@ -17,7 +17,6 @@ import (
 	//	"utils/tablespace"
 	//	"utils/users"
 	//	"utils/version"
-	"pdefcon-for-oracle/utils/sqlutils"
 )
 
 type ID string
@@ -54,11 +53,11 @@ func main() {
 	}
 	defer db.Close()
 
-	result := make(sqlutils.Result)
+	result1 := new(systemload.SystemLoad)
+	result1.DbHandler = db
 
-	result.GetMetric(db, systemload.ViewSystemLoad)
-
-	fmt.Println(result)
+	result1.GetSystemLoad()
+	result1.PrintMetrics()
 
 	//fmt.Println(wait_class)
 }
