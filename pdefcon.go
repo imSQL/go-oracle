@@ -17,6 +17,7 @@ import (
 	//	"utils/tablespace"
 	//	"utils/users"
 	//	"utils/version"
+	"pdefcon-for-oracle/utils/sqlutils"
 )
 
 type ID string
@@ -53,45 +54,11 @@ func main() {
 	}
 	defer db.Close()
 
-	var wait_class string
-	rows, err := db.Query(systemload.ViewSystemLoad)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	result := make(sqlutils.Result)
 
-	defer rows.Close()
-
-	cols, _ := rows.Columns()
-
-	values := make([][]byte, len(cols))
-	scans := make([]interface{}, len(cols))
-
-	for i := range values {
-		scans[i] = &values[i]
-	}
-
-	result := make(map[int]map[string]string)
-	i := 0
-
-	for rows.Next() {
-		if err := rows.Scan(scans...); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		row := make(map[string]string)
-
-		for k, v := range values {
-			key := cols[k]
-			row[key] = string(v)
-		}
-
-		result[i] = row
-		i++
-	}
+	result.GetMetric(db, systemload.ViewSystemLoad)
 
 	fmt.Println(result)
 
-	fmt.Println(wait_class)
+	//fmt.Println(wait_class)
 }
