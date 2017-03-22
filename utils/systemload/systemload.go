@@ -71,7 +71,7 @@ FROM
     aas
 `
 
-func (sl *SystemLoad) GetSystemLoad() {
+func (sl *SystemLoad) GetMetrics() {
 	sl.sr.GetMetric(sl.DbHandler, ViewSystemLoad)
 }
 
@@ -85,7 +85,7 @@ func (sl *SystemLoad) PrintMetrics() {
 
 	sort.Ints(sorted_keys)
 
-	fmt.Fprintf(os.Stdout, "Oracle,host=%s,region=SystemLoad ", current_hostname)
+	fmt.Fprintf(os.Stdout, "OracleSystemLoad,host=%s,region=SystemLoad ", current_hostname)
 	for _, k := range sorted_keys {
 		fmt.Fprintf(os.Stdout, "%s=%s", strings.Replace(strings.Replace(sl.sr[k]["WAIT_CLASS"], " ", "_", -1), "/", "", -1), strings.Replace(sl.sr[k]["AAS"], ".", "0.", -1))
 		if k < map_length-1 {

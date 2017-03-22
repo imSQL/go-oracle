@@ -6,7 +6,7 @@ import (
 	_ "github.com/mattn/go-oci8"
 	"os"
 	//	"utils/controlfiles"
-	//	"utils/database"
+	"pdefcon-for-oracle/utils/database"
 	//	"utils/datafile"
 	//	"utils/eventmetrics"
 	//	"utils/instance"
@@ -15,8 +15,8 @@ import (
 	//	"utils/sga"
 	"pdefcon-for-oracle/utils/systemload"
 	//	"utils/tablespace"
-	//	"utils/users"
-	//	"utils/version"
+	"pdefcon-for-oracle/utils/users"
+	"pdefcon-for-oracle/utils/version"
 )
 
 type ID string
@@ -56,8 +56,27 @@ func main() {
 	result1 := new(systemload.SystemLoad)
 	result1.DbHandler = db
 
-	result1.GetSystemLoad()
+	result1.GetMetrics()
 	result1.PrintMetrics()
+
+	result2 := new(version.Version)
+	result2.DbHandler = db
+
+	result2.GetMetrics()
+	result2.PrintMetrics()
+
+	result3 := new(users.Users)
+	result3.DbHandler = db
+	result3.GetMetrics()
+	result3.PrintMetrics()
+	result3.GetTotalCounterByUsername()
+	result3.GetTotalCounterByStatus()
+	result3.GetTotalCounter()
+
+	result4 := new(database.Database)
+	result4.DbHandler = db
+	result4.GetMetrics()
+	result4.PrintMetrics()
 
 	//fmt.Println(wait_class)
 }
