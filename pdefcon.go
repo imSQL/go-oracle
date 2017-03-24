@@ -9,7 +9,7 @@ import (
 	"pdefcon-for-oracle/utils/database"
 	//	"utils/datafile"
 	//	"utils/eventmetrics"
-	//	"utils/instance"
+	"pdefcon-for-oracle/utils/instance"
 	//	"utils/onlinelogs"
 	//	"utils/parameters"
 	//	"utils/sga"
@@ -77,6 +77,11 @@ func main() {
 	result4.DbHandler = db
 	result4.GetMetrics()
 	result4.PrintMetrics()
+
+	result5 := new(instance.Instances)
+	result5.DbHandler = db
+	result5.GetMetrics()
+	result5.PrintMetrics()
 
 	//fmt.Println(wait_class)
 }
