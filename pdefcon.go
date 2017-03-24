@@ -7,7 +7,7 @@ import (
 	"os"
 	//	"utils/controlfiles"
 	"pdefcon-for-oracle/utils/database"
-	//	"utils/datafile"
+	"pdefcon-for-oracle/utils/datafile"
 	//	"utils/eventmetrics"
 	"pdefcon-for-oracle/utils/instance"
 	//	"utils/onlinelogs"
@@ -87,6 +87,11 @@ func main() {
 	result6.DbHandler = db
 	result6.GetMetrics()
 	result6.PrintMetrics()
+
+	result7 := new(datafile.Datafile)
+	result7.DbHandler = db
+	result7.GetMetrics()
+	result7.PrintMetrics()
 
 	//fmt.Println(wait_class)
 }
