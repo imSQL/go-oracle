@@ -56,6 +56,9 @@ func (tbs *Tablespace) PrintMetrics() {
 		length_v := len(v)
 		counter := 0
 		for ak, av := range v {
+			if len(av) == 0 {
+				av = "0"
+			}
 			if counter == length_v-1 {
 				if _, ok := strconv.ParseInt(av, 10, 64); ok != nil {
 					fmt.Fprintf(os.Stdout, "%s=%q", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(av))
