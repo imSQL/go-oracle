@@ -24,5 +24,10 @@ func (vrs *Version) GetMetrics() {
 func (vrs *Version) PrintMetrics() {
 	current_hostname, _ := os.Hostname()
 	oracle := strings.Split(vrs.vers[0]["BANNER"], " ")
-	fmt.Fprintf(os.Stdout, "OracleProductionInfo,host=%s,region=Version OracleName=%q,OracleVersion=%q,OracleArch=%q\n", current_hostname, strings.Join(oracle[0:5], " "), oracle[6], oracle[8])
+	fmt.Fprintf(os.Stdout,
+		"OracleProductionInfo, host=%s,region=Version OracleName=%q,OracleVersion=%q,OracleArch=%q\n",
+		current_hostname,
+		strings.Join(oracle[0:5], " "),
+		oracle[6],
+		oracle[8])
 }
