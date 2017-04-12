@@ -15,6 +15,7 @@ import (
 	//	"utils/sga"
 	"pdefcon-for-oracle/utils/filestat"
 	"pdefcon-for-oracle/utils/systemload"
+	"pdefcon-for-oracle/utils/table"
 	"pdefcon-for-oracle/utils/tablespace"
 	"pdefcon-for-oracle/utils/users"
 	"pdefcon-for-oracle/utils/version"
@@ -98,6 +99,11 @@ func main() {
 	result8.DbHandler = db
 	result8.GetMetrics()
 	result8.PrintMetrics()
+
+	result9 := new(table.Table)
+	result9.DbHandler = db
+	result9.GetMetrics()
+	result9.PrintMetrics()
 
 	//fmt.Println(wait_class)
 }
