@@ -13,6 +13,7 @@ import (
 	//	"utils/onlinelogs"
 	//	"utils/parameters"
 	//	"utils/sga"
+	"pdefcon-for-oracle/utils/filestat"
 	"pdefcon-for-oracle/utils/systemload"
 	"pdefcon-for-oracle/utils/tablespace"
 	"pdefcon-for-oracle/utils/users"
@@ -92,6 +93,11 @@ func main() {
 	result7.DbHandler = db
 	result7.GetMetrics()
 	result7.PrintMetrics()
+
+	result8 := new(filestat.Filestat)
+	result8.DbHandler = db
+	result8.GetMetrics()
+	result8.PrintMetrics()
 
 	//fmt.Println(wait_class)
 }
