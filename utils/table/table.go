@@ -23,13 +23,9 @@ SELECT
     dt.TABLE_NAME,
     dt.CLUSTER_NAME,
     dt.STATUS,
-    dt.PCT_USED,
-    dt.PCT_INCREASE,
-    dt.PCT_USED,
     dt.LOGGING,
     dt.BACKED_UP,
     dt.NUM_ROWS,
-    dt.BLOCKS,
     dt.AVG_ROW_LEN,
     dt.CACHE,
     dt.TABLE_LOCK,
@@ -73,18 +69,21 @@ func (tb *Table) PrintMetrics() {
 		length_v := len(v)
 		counter := 0
 		for ak, av := range v {
+			if av == "" {
+				av = "Nil"
+			}
 			if counter == length_v-1 {
 				if _, ok := strconv.ParseInt(av, 10, 64); ok != nil {
-					fmt.Fprintf(os.Stdout, "%s=%q", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(av))
+					fmt.Fprintf(os.Stdout, "%s=%q", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(strings.TrimSpace(av)))
 				} else {
-					fmt.Fprintf(os.Stdout, "%s=%s", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(av))
+					fmt.Fprintf(os.Stdout, "%s=%q", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(strings.TrimSpace(av)))
 
 				}
 			} else {
 				if _, ok := strconv.ParseInt(av, 10, 64); ok != nil {
-					fmt.Fprintf(os.Stdout, "%s=%q,", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(av))
+					fmt.Fprintf(os.Stdout, "%s=%q,", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(strings.TrimSpace(av)))
 				} else {
-					fmt.Fprintf(os.Stdout, "%s=%s,", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(av))
+					fmt.Fprintf(os.Stdout, "%s=%q,", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(strings.TrimSpace(av)))
 
 				}
 			}
