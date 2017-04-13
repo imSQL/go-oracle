@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/mattn/go-oci8"
-	//"os"
+	"os"
 	"pdefcon-for-oracle/utils/sqlutils"
-	//"strconv"
-	//"strings"
+	"strconv"
+	"strings"
 )
 
 type Table struct {
@@ -55,7 +55,7 @@ SELECT
     dtm.DROP_SEGMENTS
 FROM
     DBA_TABLES dt,
-    DBA_TAB_MODIFICATIONS dtm
+    SYS.DBA_TAB_MODIFICATIONS dtm
 WHERE
     dt.table_name = dtm.table_name
 `
@@ -66,5 +66,30 @@ func (tb *Table) GetMetrics() {
 }
 
 func (tb *Table) PrintMetrics() {
-	fmt.Println(tb)
+	current_hostname, _ := os.Hostname()
+
+	for _, v := range tb.tablestat {
+		fmt.Fprintf(os.Stdout, "OracleTableStat,host=%s,tablename=%s ", current_hostname, v["TABLE_NAME"])
+		length_v := len(v)
+		counter := 0
+		for ak, av := range v {
+			if counter == length_v-1 {
+				if _, ok := strconv.ParseInt(av, 10, 64); ok != nil {
+					fmt.Fprintf(os.Stdout, "%s=%q", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(av))
+				} else {
+					fmt.Fprintf(os.Stdout, "%s=%s", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(av))
+
+				}
+			} else {
+				if _, ok := strconv.ParseInt(av, 10, 64); ok != nil {
+					fmt.Fprintf(os.Stdout, "%s=%q,", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(av))
+				} else {
+					fmt.Fprintf(os.Stdout, "%s=%s,", strings.Replace(strings.ToLower(ak), "#", "", -1), strings.ToLower(av))
+
+				}
+			}
+			counter++
+		}
+		fmt.Fprintf(os.Stdout, "\n")
+	}
 }
