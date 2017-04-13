@@ -54,6 +54,7 @@ FROM
     SYS.DBA_TAB_MODIFICATIONS dtm
 WHERE
     dt.table_name = dtm.table_name
+AND dt.OWNER not in ('SYS','SYSTEM')
 `
 )
 
