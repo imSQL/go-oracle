@@ -19,6 +19,8 @@ import (
 	"pdefcon-for-oracle/utils/tablespace"
 	"pdefcon-for-oracle/utils/users"
 	"pdefcon-for-oracle/utils/version"
+
+	"pdefcon-for-oracle/awr/loadprofile"
 )
 
 type ID string
@@ -104,6 +106,11 @@ func main() {
 	result9.DbHandler = db
 	result9.GetMetrics()
 	result9.PrintMetrics()
+
+	result10 := new(loadprofile.Cursor)
+	result10.DbHandler = db
+	result10.GetMetrics()
+	result10.PrintMetrics()
 
 	//fmt.Println(wait_class)
 }
