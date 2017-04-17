@@ -21,6 +21,7 @@ import (
 	"pdefcon-for-oracle/utils/version"
 
 	"pdefcon-for-oracle/awr/loadprofile"
+	"pdefcon-for-oracle/awr/topsql"
 )
 
 type ID string
@@ -112,5 +113,11 @@ func main() {
 	result10.GetMetrics()
 	result10.PrintMetrics()
 
+	result11 := new(topsql.Cursor)
+	result11.DbHandler = db
+	result11.GetMetrics()
+	//result11.PrintMetrics()
+
 	//fmt.Println(wait_class)
+
 }
