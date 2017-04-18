@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/mattn/go-oci8"
-	//	"os"
+	"os"
 	"pdefcon-for-oracle/utils/sqlutils"
 	"strconv"
 	"time"
@@ -13,7 +13,7 @@ import (
 type OracleTopSQL struct {
 	interval_end   string
 	snap_id        int64
-	sql_id         int64
+	sql_id         string
 	execs          int64
 	buff_gets      int64
 	phys_reads     int64
@@ -39,7 +39,7 @@ type OracleTopSQL struct {
 }
 
 type Cursor struct {
-	OracleTopSQL
+	ots       []OracleTopSQL
 	cursor    sqlutils.Result
 	DbHandler *sql.DB
 }
@@ -80,7 +80,7 @@ FROM
         FROM
             (
                 SELECT
-                    TO_CHAR(a.end_interval_time,'MM/DD/YYYY HH24:MI:SS') AS
+                    TO_CHAR(a.end_interval_time,'YYYY-MM-DD HH24:MI:SS') AS
                     end_interval_time,
                     a.snap_id,
                     a.sql_id,
@@ -177,68 +177,101 @@ func (ts *Cursor) GetMetrics() {
 	current_date_end := fmt.Sprintf("%s59:59", time.Now().Format("2006-01-02 15:"))
 	query_text := fmt.Sprintf(TopSQL, current_date_start, current_date_end, 10, 10, 10, 10, 10, 10)
 
-	fmt.Println(current_date_start, current_date_end)
-
 	ts.cursor.GetMetric(ts.DbHandler, query_text)
 
-	for ak, av := range ts.cursor[0] {
-		switch ak {
-		case "INTERVAL_END":
-			ts.OracleTopSQL.interval_end = av
-		case "SNAP_ID":
-			ts.OracleTopSQL.snap_id, _ = strconv.ParseInt(av, 10, 64)
-		case "SQL_ID":
-			ts.OracleTopSQL.sql_id, _ = strconv.ParseInt(av, 10, 64)
-		case "EXECS":
-			ts.OracleTopSQL.execs, _ = strconv.ParseInt(av, 10, 64)
-		case "BUFF_GETS":
-			ts.OracleTopSQL.buff_gets, _ = strconv.ParseInt(av, 10, 64)
-		case "PHYS_READS":
-			ts.OracleTopSQL.phys_reads, _ = strconv.ParseInt(av, 10, 64)
-		case "CPUS":
-			ts.OracleTopSQL.cpus, _ = strconv.ParseFloat(av, 64)
-		case "ELAP_S":
-			ts.OracleTopSQL.elap_s, _ = strconv.ParseFloat(av, 64)
-		case "ROWS_RET":
-			ts.OracleTopSQL.rows_ret, _ = strconv.ParseInt(av, 10, 64)
-		case "IO_WAITS":
-			ts.OracleTopSQL.io_waits, _ = strconv.ParseFloat(av, 64)
-		case "EXEC_RANK":
-			ts.OracleTopSQL.exec_rank, _ = strconv.ParseInt(av, 10, 64)
-		case "BUFF_GET_RANK":
-			ts.OracleTopSQL.buff_get_rank, _ = strconv.ParseInt(av, 10, 64)
-		case "PHYS_READ_RANK":
-			ts.OracleTopSQL.phys_read_rank, _ = strconv.ParseInt(av, 10, 64)
-		case "CPU_RANK":
-			ts.OracleTopSQL.cpu_rank, _ = strconv.ParseInt(av, 10, 64)
-		case "ELAP_RANK":
-			ts.OracleTopSQL.elap_rank, _ = strconv.ParseInt(av, 10, 64)
-		case "IO_WAIT_RANK":
-			ts.OracleTopSQL.io_wait_rank, _ = strconv.ParseInt(av, 10, 64)
-		case "CONCUR_WAIT_S":
-			ts.OracleTopSQL.concur_wait_s, _ = strconv.ParseInt(av, 10, 64)
-		case "PARSES":
-			ts.OracleTopSQL.parses, _ = strconv.ParseInt(av, 10, 64)
-		case "SORTS":
-			ts.OracleTopSQL.sorts, _ = strconv.ParseInt(av, 10, 64)
-		case "PLSQLS":
-			ts.OracleTopSQL.plsqls, _ = strconv.ParseFloat(av, 64)
-		case "APP_WAIT_S":
-			ts.OracleTopSQL.app_wait_s, _ = strconv.ParseFloat(av, 64)
-		case "GETS_PER_EXEC":
-			ts.OracleTopSQL.gets_per_exec, _ = strconv.ParseInt(av, 10, 64)
-		case "READS_PER_EXEC":
-			ts.OracleTopSQL.reads_per_exec, _ = strconv.ParseInt(av, 10, 64)
-		case "ROWS_PER_EXEC":
-			ts.OracleTopSQL.rows_per_exec, _ = strconv.ParseInt(av, 10, 64)
-		case "SQL_TEXT":
-			ts.OracleTopSQL.sql_text = av
-		default:
-			fmt.Println("Nothing")
+	for _, val := range ts.cursor {
+		tmp := new(OracleTopSQL)
+		for ak, av := range val {
+			switch ak {
+			case "INTERVAL_END":
+				tmp.interval_end = av
+			case "SNAP_ID":
+				tmp.snap_id, _ = strconv.ParseInt(av, 10, 64)
+			case "SQL_ID":
+				tmp.sql_id = av
+			case "EXECS":
+				tmp.execs, _ = strconv.ParseInt(av, 10, 64)
+			case "BUFF_GETS":
+				tmp.buff_gets, _ = strconv.ParseInt(av, 10, 64)
+			case "PHYS_READS":
+				tmp.phys_reads, _ = strconv.ParseInt(av, 10, 64)
+			case "CPUS":
+				tmp.cpus, _ = strconv.ParseFloat(av, 64)
+			case "ELAP_S":
+				tmp.elap_s, _ = strconv.ParseFloat(av, 64)
+			case "ROWS_RET":
+				tmp.rows_ret, _ = strconv.ParseInt(av, 10, 64)
+			case "IO_WAITS":
+				tmp.io_waits, _ = strconv.ParseFloat(av, 64)
+			case "EXEC_RANK":
+				tmp.exec_rank, _ = strconv.ParseInt(av, 10, 64)
+			case "BUFF_GET_RANK":
+				tmp.buff_get_rank, _ = strconv.ParseInt(av, 10, 64)
+			case "PHYS_READ_RANK":
+				tmp.phys_read_rank, _ = strconv.ParseInt(av, 10, 64)
+			case "CPU_RANK":
+				tmp.cpu_rank, _ = strconv.ParseInt(av, 10, 64)
+			case "ELAP_RANK":
+				tmp.elap_rank, _ = strconv.ParseInt(av, 10, 64)
+			case "IO_WAIT_RANK":
+				tmp.io_wait_rank, _ = strconv.ParseInt(av, 10, 64)
+			case "CONCUR_WAIT_S":
+				tmp.concur_wait_s, _ = strconv.ParseInt(av, 10, 64)
+			case "PARSES":
+				tmp.parses, _ = strconv.ParseInt(av, 10, 64)
+			case "SORTS":
+				tmp.sorts, _ = strconv.ParseInt(av, 10, 64)
+			case "PLSQLS":
+				tmp.plsqls, _ = strconv.ParseFloat(av, 64)
+			case "APP_WAIT_S":
+				tmp.app_wait_s, _ = strconv.ParseFloat(av, 64)
+			case "GETS_PER_EXEC":
+				tmp.gets_per_exec, _ = strconv.ParseInt(av, 10, 64)
+			case "READS_PER_EXEC":
+				tmp.reads_per_exec, _ = strconv.ParseInt(av, 10, 64)
+			case "ROWS_PER_EXEC":
+				tmp.rows_per_exec, _ = strconv.ParseInt(av, 10, 64)
+			case "SQL_TEXT":
+				tmp.sql_text = av
+			default:
+				fmt.Println("Nothing")
+			}
 		}
+		ts.ots = append(ts.ots, *tmp)
+
 	}
 }
 
 func (ts *Cursor) PrintMetrics() {
-	fmt.Println(ts.OracleTopSQL)
+	current_hostname, _ := os.Hostname()
+	for _, av := range ts.ots {
+		fmt.Fprintf(os.Stdout, "OracleTopSQL,host=%s,sql_id=%s interval_end=%q,snap_id=%d,sql_id=%q,execs=%d,buff_gets=%d,phys_reads=%d,cpus=%.2f,elap_s=%.2f,rows_ret=%d,io_waits=%.2f,exec_rank=%d,buff_get_rank=%d,phys_read_rank=%d,cpu_rank=%d,elap_rank=%d,io_wait_rank=%d,concur_wait_s=%d,parses=%d,sorts=%d,plsqls=%.2f,app_wait_s=%.2f,gets_per_exec=%d,reads_per_exec=%d,rows_per_exec=%d,sql_text=%q\n",
+			current_hostname,
+			av.sql_id,
+			av.interval_end,
+			av.snap_id,
+			av.sql_id,
+			av.execs,
+			av.buff_gets,
+			av.phys_reads,
+			av.cpus,
+			av.elap_s,
+			av.rows_ret,
+			av.io_waits,
+			av.exec_rank,
+			av.buff_get_rank,
+			av.phys_read_rank,
+			av.cpu_rank,
+			av.elap_rank,
+			av.io_wait_rank,
+			av.concur_wait_s,
+			av.parses,
+			av.sorts,
+			av.plsqls,
+			av.app_wait_s,
+			av.gets_per_exec,
+			av.reads_per_exec,
+			av.rows_per_exec,
+			av.sql_text)
+	}
 }

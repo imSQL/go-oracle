@@ -116,7 +116,7 @@ func main() {
 	result11 := new(topsql.Cursor)
 	result11.DbHandler = db
 	result11.GetMetrics()
-	//result11.PrintMetrics()
+	result11.PrintMetrics()
 
 	//fmt.Println(wait_class)
 
