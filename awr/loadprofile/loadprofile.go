@@ -136,13 +136,12 @@ FROM
 )
 
 func (cs *Cursor) GetMetrics() {
-	current_date_start := time.Now().Format("2006-01-02 00:00:00")
-	current_date_end := fmt.Sprintf("%s 23:59:59", time.Now().Format("2006-01-02"))
-	pre_hour := (time.Now().Hour() - 2)
+	current_date_start := fmt.Sprintf("%s00:00", time.Now().Format("2006-01-02 00:"))
+	current_date_end := fmt.Sprintf("%s23:59:59", time.Now().Format("2006-01-02 "))
+	curr_hour := time.Now().Hour()
 
-	query_text := fmt.Sprintf(LoadProfile, current_date_start, current_date_end, pre_hour, pre_hour)
-
-	cs.cursor.GetMetric(cs.DbHandler, query_text)
+	query_text := fmt.Sprintf(LoadProfile, current_date_start, current_date_end, curr_hour, curr_hour)
+	fmt.Println(query_text)
 
 	for ak, av := range cs.cursor[0] {
 		switch ak {
