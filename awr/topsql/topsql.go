@@ -7,7 +7,12 @@ import (
 	"os"
 	"pdefcon-for-oracle/utils/sqlutils"
 	"strconv"
+	"strings"
 	"time"
+)
+
+var (
+	escaper = strings.NewReplacer(`=`, `\=`, `,`, `\,`, `"`, `'`)
 )
 
 type OracleTopSQL struct {
@@ -272,6 +277,7 @@ func (ts *Cursor) PrintMetrics() {
 			av.gets_per_exec,
 			av.reads_per_exec,
 			av.rows_per_exec,
-			av.sql_text)
+			escaper.Replace(av.sql_text),
+		)
 	}
 }

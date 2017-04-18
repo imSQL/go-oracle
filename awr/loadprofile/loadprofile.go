@@ -141,7 +141,7 @@ func (cs *Cursor) GetMetrics() {
 	curr_hour := time.Now().Hour()
 
 	query_text := fmt.Sprintf(LoadProfile, current_date_start, current_date_end, curr_hour, curr_hour)
-	fmt.Println(query_text)
+	cs.cursor.GetMetric(cs.DbHandler, query_text)
 
 	for ak, av := range cs.cursor[0] {
 		switch ak {
