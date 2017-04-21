@@ -1,4 +1,4 @@
-package instance
+package instance_basic
 
 import (
 	"database/sql"

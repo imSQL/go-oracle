@@ -9,7 +9,7 @@ import (
 	"pdefcon-for-oracle/utils/database"
 	"pdefcon-for-oracle/utils/datafile"
 	//	"utils/eventmetrics"
-	"pdefcon-for-oracle/utils/instance"
+	"pdefcon-for-oracle/utils/instance_basic"
 	//	"utils/onlinelogs"
 	//	"utils/parameters"
 	//	"utils/sga"
@@ -20,6 +20,7 @@ import (
 	"pdefcon-for-oracle/utils/users"
 	"pdefcon-for-oracle/utils/version"
 
+	"pdefcon-for-oracle/awr/instance"
 	"pdefcon-for-oracle/awr/loadprofile"
 	"pdefcon-for-oracle/awr/topsql"
 )
@@ -83,7 +84,7 @@ func main() {
 	result4.GetMetrics()
 	result4.PrintMetrics()
 
-	result5 := new(instance.Instances)
+	result5 := new(instance_basic.Instances)
 	result5.DbHandler = db
 	result5.GetMetrics()
 	result5.PrintMetrics()
@@ -118,6 +119,10 @@ func main() {
 	result11.GetMetrics()
 	result11.PrintMetrics()
 
+	result12 := new(instance.Cursor)
+	result12.DbHandler = db
+	result12.GetMetrics()
+	result12.PrintMetrics()
 	//fmt.Println(wait_class)
 
 }
