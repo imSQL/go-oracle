@@ -50,7 +50,7 @@ func (cs *Cursor) GetMetrics() {
 			case "POOLSIZE":
 				tmp.poolsize, _ = strconv.ParseInt(av, 10, 64)
 			case "COMPONENTNAME":
-				tmp.componentname = strings.Replace(strings.Replace(strings.Replace(av, "/", "", -1), ":", "", -1), " ", "_", -1)
+				tmp.componentname = strings.Replace(strings.Replace(strings.Replace(strings.Replace(strings.Replace(av, ",", "", -1), "#", "", -1), "/", "", -1), ":", "", -1), " ", "_", -1)
 			case "COMPONENTSIZE":
 				tmp.componentsize, _ = strconv.ParseInt(av, 10, 64)
 			case "RATE":
