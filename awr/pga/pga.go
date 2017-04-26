@@ -103,6 +103,6 @@ func (cs *Cursor) GetMetrics() {
 func (cs *Cursor) PrintMetrics() {
 	current_hostname, _ := os.Hostname()
 	for _, av := range cs.pga {
-		fmt.Fprintf(os.Stdout, "OraclePGA,host=%s,region=pgastat pganame=%q,pgavalue=%.2f\n", current_hostname, av.pganame, av.pgavalue)
+		fmt.Fprintf(os.Stdout, "OraclePGA,host=%s,pganame=%s pganame=%q,pgavalue=%.2f\n", current_hostname, av.pganame, av.pganame, av.pgavalue)
 	}
 }
