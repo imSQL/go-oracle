@@ -23,6 +23,7 @@ import (
 	"pdefcon-for-oracle/awr/bufferpool"
 	"pdefcon-for-oracle/awr/instance"
 	"pdefcon-for-oracle/awr/loadprofile"
+	"pdefcon-for-oracle/awr/pga"
 	"pdefcon-for-oracle/awr/sga"
 	"pdefcon-for-oracle/awr/topsql"
 )
@@ -136,5 +137,10 @@ func main() {
 	result14.GetMetrics()
 	result14.PrintMetrics()
 	//fmt.Println(wait_class)
+
+	result15 := new(pga.Cursor)
+	result15.DbHandler = db
+	result15.GetMetrics()
+	result15.PrintMetrics()
 
 }
