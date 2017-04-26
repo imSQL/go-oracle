@@ -20,8 +20,10 @@ import (
 	"pdefcon-for-oracle/utils/users"
 	"pdefcon-for-oracle/utils/version"
 
+	"pdefcon-for-oracle/awr/bufferpool"
 	"pdefcon-for-oracle/awr/instance"
 	"pdefcon-for-oracle/awr/loadprofile"
+	"pdefcon-for-oracle/awr/sga"
 	"pdefcon-for-oracle/awr/topsql"
 )
 
@@ -123,6 +125,16 @@ func main() {
 	result12.DbHandler = db
 	result12.GetMetrics()
 	result12.PrintMetrics()
+
+	result13 := new(bufferpool.Cursor)
+	result13.DbHandler = db
+	result13.GetMetrics()
+	result13.PrintMetrics()
+
+	result14 := new(sga.Cursor)
+	result14.DbHandler = db
+	result14.GetMetrics()
+	result14.PrintMetrics()
 	//fmt.Println(wait_class)
 
 }
